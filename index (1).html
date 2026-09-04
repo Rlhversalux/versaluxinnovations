@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="VersaLux — The world's first premium exfoliating bath mitt with a built-in soap dispensing system. Patent pending.">
+<title>VersaLux Innovations — Redefining the Shower Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,400&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0c1a3a;--navy-mid:#102050;--blue:#1a5bc4;--blue-light:#3b82f6;--off-white:#f4f7ff;--gray:#6b7280;--light-gray:#e8edf8;--gold:#c9a84c}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#87CEEB;color:#111;overflow-x:hidden}
+#anim-overlay{position:fixed;inset:0;z-index:9999;background:#0c1a3a;display:flex;align-items:center;justify-content:center;transition:opacity .9s ease}
+#anim-overlay.fade-out{opacity:0;pointer-events:none}
+#anim-overlay.gone{display:none}
+#anim-canvas{display:block;width:min(680px,90vw);height:auto}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(12,26,58,.97);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:4px 48px;border-bottom:1px solid rgba(255,255,255,.08);transition:padding .3s}
+.nav-logo img{height:92px;width:auto;display:block}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(255,255,255,.80);text-decoration:none;font-size:.88rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{background:var(--blue);color:#fff;padding:9px 22px;border-radius:6px;text-decoration:none;font-size:.85rem;font-weight:600;transition:background .2s}
+.nav-cta:hover{background:var(--blue-light)}
+#hero{min-height:100vh;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 55%,#0e2d6e 100%);display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:120px 80px 80px;gap:60px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(26,91,196,.22);border:1px solid rgba(59,130,246,.35);color:#93c5fd;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:24px}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.8vw,3.4rem);font-weight:700;line-height:1.15;color:#fff;margin-bottom:20px}
+h1 em{color:#60a5fa;font-style:italic}
+.hero-sub{font-size:1.05rem;line-height:1.75;color:rgba(255,255,255,.72);max-width:520px;margin-bottom:36px}
+.pills{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px}
+.pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);font-size:.78rem;font-weight:500;padding:5px 14px;border-radius:20px}
+.btns{display:flex;gap:16px;flex-wrap:wrap}
+.btn-p{background:var(--blue);color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:.95rem;font-weight:700;border:2px solid var(--blue);transition:background .2s}
+.btn-p:hover{background:var(--blue-light)}
+.btn-o{background:transparent;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:.95rem;font-weight:600;border:2px solid rgba(255,255,255,.3);transition:border-color .2s}
+.btn-o:hover{border-color:#fff}
+.hero-img{display:flex;align-items:center;justify-content:center}
+.hero-img img{width:100%;max-width:520px;height:auto;filter:drop-shadow(0 28px 56px rgba(0,0,0,.35));border-radius:12px}
+section{padding:88px 80px}
+.ey{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.st{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,2.8vw,2.6rem);font-weight:700;line-height:1.2;color:var(--navy);margin-bottom:20px}
+.st.lt{color:#fff}
+.ss{font-size:1rem;line-height:1.8;color:var(--gray);max-width:640px;margin-bottom:52px}
+.ss.lt{color:rgba(255,255,255,.70)}
+#problem{background:var(--navy)}
+.clutter-visual{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:52px}
+.clutter-before{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:28px}
+.clutter-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.clutter-label.bad{color:#f87171}
+.clutter-label.good{color:#34d399}
+.clutter-items{display:flex;flex-wrap:wrap;gap:10px}
+.citem{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:8px 12px;font-size:.80rem;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:6px}
+.clutter-after{background:rgba(26,91,196,.12);border:2px solid rgba(59,130,246,.35);border-radius:14px;padding:28px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.clutter-after .big-icon{font-size:3.5rem;margin-bottom:12px}
+.clutter-after h4{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:8px}
+.clutter-after p{font-size:.86rem;line-height:1.7;color:rgba(255,255,255,.65)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:30px 24px;border-top:3px solid var(--blue)}
+.pnum{font-size:2.2rem;font-weight:900;color:rgba(59,130,246,.22);margin-bottom:12px;line-height:1}
+.ptit{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:10px}
+.pdesc{font-size:.87rem;line-height:1.75;color:rgba(255,255,255,.60)}
+#surfaces{background:var(--off-white)}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:52px}
+.scard{background:#fff;border:1px solid var(--light-gray);border-radius:14px;padding:24px 16px;text-align:center}
+.snum2{font-size:1.5rem;font-weight:900;color:var(--blue);margin-bottom:8px}
+.sname{font-size:.93rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.sdesc{font-size:.80rem;line-height:1.6;color:var(--gray)}
+#howit{background:var(--navy)}
+.hgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.hcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:30px 22px}
+.hstep{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:12px}
+.hcard h4{font-size:.98rem;font-weight:700;color:#fff;margin-bottom:10px}
+.hcard p{font-size:.85rem;line-height:1.7;color:rgba(255,255,255,.62)}
+#solution{background:#fff}
+.sol{display:grid;grid-template-columns:1fr 1fr;gap:68px;align-items:start}
+.exploded-diagram{background:var(--off-white);border:1px solid var(--light-gray);border-radius:18px;padding:28px}
+.exploded-diagram svg{width:100%;height:auto;display:block}
+.ilist{display:flex;flex-direction:column;gap:14px}
+.inno{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:12px;background:var(--off-white);border:1px solid var(--light-gray)}
+.iico{width:40px;height:40px;min-width:40px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.itxt h4{font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:4px}
+.itxt p{font-size:.82rem;line-height:1.65;color:var(--gray)}
+#about{background:var(--off-white)}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:68px;align-items:start}
+.fi{font-size:1.4rem;font-weight:800;color:var(--navy);line-height:1.3;margin-bottom:18px}
+.fi span{color:var(--blue)}
+.fb{font-size:.95rem;line-height:1.85;color:#374151}
+.fb p{margin-bottom:12px}
+.fmeta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.fm{background:#fff;border:1px solid var(--light-gray);border-radius:8px;padding:10px 14px;font-size:.78rem;text-align:center}
+.fm strong{display:block;font-size:.95rem;color:var(--navy);font-weight:800;margin-bottom:2px}
+.fm span{color:var(--gray)}
+.mvs{display:flex;flex-direction:column;gap:20px}
+.mvc{border-left:4px solid var(--blue);padding:20px 24px;background:#fff;border-radius:0 12px 12px 0}
+.mvl{font-size:.7rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+.mvc p{font-size:.97rem;font-style:italic;line-height:1.75;color:var(--navy);font-weight:500}
+.tmb{padding:20px 22px;background:#fff;border-radius:12px;border:1px solid var(--light-gray)}
+.tmb p{font-size:.87rem;line-height:1.7;color:var(--gray)}
+.tmb strong{color:var(--navy)}
+#prototype{background:#fff}
+.tl{display:flex;flex-direction:column;max-width:680px;margin:0 auto;position:relative}
+.tl::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:2px;background:var(--light-gray)}
+.tli{display:flex;gap:26px;align-items:flex-start;padding:0 0 34px;position:relative}
+.tldot{width:46px;height:46px;min-width:46px;border-radius:50%;background:var(--navy);border:3px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:1.1rem;position:relative;z-index:1}
+.tlc h4{font-size:.98rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.tlc p{font-size:.86rem;line-height:1.7;color:var(--gray)}
+#moat{background:linear-gradient(135deg,var(--navy) 0%,#0a2060 100%)}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px}
+.mcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:28px 20px;text-align:center}
+.mico{font-size:2rem;margin-bottom:12px}
+.mcard h4{font-size:.96rem;font-weight:700;color:#fff;margin-bottom:10px}
+.mcard p{font-size:.83rem;line-height:1.65;color:rgba(255,255,255,.60)}
+#partners{background:var(--off-white);text-align:center}
+.pbody{font-size:1rem;line-height:1.8;color:var(--gray);max-width:600px;margin:0 auto 36px}
+.cblock{display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--light-gray);border-radius:12px;padding:16px 26px}
+.cblock a{color:var(--blue);text-decoration:none;font-weight:600;font-size:1rem}
+#waitlist{background:var(--navy);text-align:center}
+.wform{display:flex;gap:12px;max-width:450px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.wform input{flex:1;min-width:190px;padding:12px 16px;border:1px solid rgba(255,255,255,.2);border-radius:8px;font-size:.92rem;outline:none;font-family:inherit;background:rgba(255,255,255,.08);color:#fff}
+.wform input::placeholder{color:rgba(255,255,255,.45)}
+.wform input:focus{border-color:var(--blue-light)}
+.wform button{background:var(--blue);color:#fff;padding:12px 24px;border-radius:8px;border:none;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.wform button:hover{background:var(--blue-light)}
+#wm{margin-top:14px;font-size:.9rem;color:#60a5fa;display:none}
+.wnote{font-size:.80rem;color:rgba(255,255,255,.40);margin-top:14px;font-style:italic}
+footer{background:var(--navy);color:rgba(255,255,255,.62);padding:40px 80px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;border-top:1px solid rgba(255,255,255,.07)}
+.flogo img{height:80px;width:auto}
+.ftxt{font-size:.78rem;line-height:1.7;text-align:center}
+.flinks{display:flex;gap:20px}
+.flinks a{color:rgba(255,255,255,.50);text-decoration:none;font-size:.78rem;transition:color .2s}
+.flinks a:hover{color:#fff}
+@media(max-width:960px){
+  #hero{grid-template-columns:1fr;padding:110px 32px 60px;text-align:center}
+  .hero-img{margin-top:40px}
+  section{padding:60px 28px}
+  nav{padding:10px 24px}
+  .nav-links{display:none}
+  .pgrid,.mgrid,.hgrid{grid-template-columns:1fr}
+  .sgrid{grid-template-columns:repeat(2,1fr)}
+  .sol,.agrid{grid-template-columns:1fr;gap:44px}
+  .clutter-visual{grid-template-columns:1fr}
+  footer{flex-direction:column;text-align:center;padding:30px 22px}
+}
+</style>
+</head>
+<body>
+
+<!-- ANIMATION OVERLAY -->
+<div id="anim-overlay">
+  <canvas id="anim-canvas" width="680" height="390"></canvas>
+</div>
+
+<!-- NAV -->
+<nav id="nb">
+  <div class="nav-logo"><a href="#hero"><img id="logo-img" src="versalux-logo.png" alt="VersaLux Innovations"></a></div>
+  <ul class="nav-links">
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#surfaces">The Product</a></li>
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#partners">Partners</a></li>
+    <li><a href="#waitlist">Get Updates</a></li>
+  </ul>
+  <a href="#waitlist" class="nav-cta">Get Updates</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div>
+    <div class="hero-badge">Patent Pending &nbsp;·&nbsp; Trademark Registered</div>
+    <h1>Multiple Layers.<br><em>One Clean.</em></h1>
+    <p class="hero-sub">VersaLux Body Mate brings multiple bathing surfaces and an integrated soap-dispensing system together in one product — designed to make everyday bathing simpler, smarter, and more luxurious.</p>
+    <div class="pills">
+      <span class="pill">Dual-Layer Reversible</span>
+      <span class="pill">Integrated Soap Dispenser</span>
+      <span class="pill">Magnetic Closure</span>
+      <span class="pill">Ambidextrous Design</span>
+      <span class="pill">Family Sizing</span>
+    </div>
+    <div class="btns">
+      <a href="#waitlist" class="btn-p">Get Product Updates</a>
+      <a href="#surfaces" class="btn-o">See How It Works</a>
+    </div>
+  </div>
+  <div class="hero-img">
+    <img src="versalux-product.jpg" alt="VersaLux Body Mate — complete kit with mitts and soap dispenser">
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <p class="ey">The Problem</p>
+  <h2 class="st lt">Your Shower Is Overloaded.</h2>
+  <p class="ss lt">The average shower holds 7–12 separate products — loofahs, sponges, washcloths, scrubbers, multiple soap bottles. Every one of them is something extra to buy, store, clean, and replace. VersaLux Body Mate was designed to change that.</p>
+  <div class="clutter-visual" style="margin-bottom:48px">
+      <img src="versalux-before-after.jpg" alt="VersaLux Body Mate — Before and After" style="width:100%;height:auto;border-radius:14px;display:block">
+    </div>
+  <div class="pgrid">
+    <div class="pcard"><div class="pnum">01</div><div class="ptit">Too Many Products</div><p class="pdesc">Loofahs, sponges, washcloths, exfoliating gloves — each does one thing. A complete routine requires all of them.</p></div>
+    <div class="pcard"><div class="pnum">02</div><div class="ptit">Constant Interruption</div><p class="pdesc">Reaching for soap, switching tools, fumbling mid-shower — the routine is broken up constantly by product limitations.</p></div>
+    <div class="pcard"><div class="pnum">03</div><div class="ptit">Fast Hygiene Decline</div><p class="pdesc">Loofahs and sponges trap bacteria within days. Most people use them far longer than they should — a genuine hygiene risk.</p></div>
+  </div>
+</section>
+
+<!-- SURFACES -->
+<section id="surfaces">
+  <p class="ey">What VersaLux Body Mate Brings Together</p>
+  <h2 class="st">Different Surfaces. One Product.</h2>
+  <p class="ss">Each surface and component of VersaLux Body Mate serves a specific purpose — giving you a complete bathing experience without reaching for anything else.</p>
+  <div class="sgrid">
+    <div class="scard"><div class="snum2">01</div><div class="sname">Terry-Microfiber Blend</div><p class="sdesc">Premium combined fabric — terry cloth softness for everyday cleansing, microfiber performance for gentle facial and sensitive skin care, woven into one layer.</p></div>
+    <div class="scard"><div class="snum2">02</div><div class="sname">Silicone Exfoliating</div><p class="sdesc">A textured silicone surface built into the construction — deep exfoliation and circulation without a separate scrubber.</p></div>
+    <div class="scard"><div class="snum2">03</div><div class="sname">Nylon Outer Layer</div><p class="sdesc">The exfoliating nylon exterior in closed mode — firm, effective cleansing with no extra accessories needed.</p></div>
+    <div class="scard"><div class="snum2">04</div><div class="sname">Built-In Components</div><p class="sdesc">Neodymium magnets, internal soap bladder with check valve, fitted wrist cuff, and hanging loop — built into one seamless product.</p></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="howit" style="background:var(--navy)">
+  <p class="ey" style="color:#93c5fd">How the Soap System Works</p>
+  <h2 class="st lt">A Lux Clean in Every Squeeze.</h2>
+  <p class="ss lt" style="margin-bottom:44px">Soap is already where you're washing. No reaching, no interruptions.</p>
+  <div class="hgrid">
+    <div class="hcard"><div class="hstep">Step 01</div><h4>Fill the Internal Bladder</h4><p>Fill the squeeze-bulb dispenser with your liquid soap. The check valve keeps it sealed and ready until you need it.</p></div>
+    <div class="hcard"><div class="hstep">Step 02</div><h4>Squeeze to Dispense</h4><p>A gentle squeeze delivers soap directly through the palm pouch to the surface you're washing with — right where you need it.</p></div>
+    <div class="hcard"><div class="hstep">Step 03</div><h4>Lather and Continue</h4><p>No reaching. No interruption. Lather and continue on whichever surface you chose. One product — start to finish.</p></div>
+  </div>
+</section>
+
+<!-- SOLUTION — 2D Exploded Diagram -->
+<section id="solution">
+  <p class="ey">Key Innovations</p>
+  <h2 class="st">One Mitt. Three Surfaces. Zero Interruptions.</h2>
+  <div class="sol">
+    <div class="exploded-diagram" style="padding:0;overflow:hidden">
+      <img src="versalux-exploded.jpg" alt="VersaLux Body Mate — Exploded View" style="width:100%;height:auto;display:block;border-radius:18px">
+    </div>
+    <div>
+      <p style="font-size:.95rem;line-height:1.8;color:var(--gray);margin-bottom:24px">No existing product — from any brand — offers all of these features in combination. VersaLux Body Mate is not competing in a category. It is creating one.</p>
+      <div class="ilist">
+        <div class="inno"><div class="iico">&#128260;</div><div class="itxt"><h4>Three Usable Surfaces</h4><p>Exfoliating outer (closed), terry-microfiber blend front (reversed), gentle back (face-safe) — one mitt, three complete functions.</p></div></div>
+        <div class="inno"><div class="iico">&#128167;</div><div class="itxt"><h4>Integrated Soap Delivery</h4><p>Squeeze-bulb dispenser with check valve in a Velcro-sealed palm pouch — soap delivered with no reaching.</p></div></div>
+        <div class="inno"><div class="iico">&#129352;</div><div class="itxt"><h4>Dual-Mode Magnetic Closure</h4><p>Neodymium magnets secure the mitt in both closed and reversed positions. Single-handed operation.</p></div></div>
+        <div class="inno"><div class="iico">&#128218;</div><div class="itxt"><h4>Book-Spine Assembly</h4><p>Permanently sewn left seam; magnetic right seam enables smooth single-handed reversal between modes.</p></div></div>
+        <div class="inno"><div class="iico">&#129309;</div><div class="itxt"><h4>Ambidextrous Design</h4><p>Fitted wrist cuff, hanging loop, dual thumb holes — comfortable for left- and right-handed users.</p></div></div>
+        <div class="inno"><div class="iico">&#128106;</div><div class="itxt"><h4>Multiple Sizing</h4><p>Adult Large, Medium, Small, and Junior — one premium experience for the whole family.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="agrid">
+    <div>
+      <p class="ey">Our Story</p>
+      <div class="fi">Built from a <span>decade of conviction</span> and one relentless founder.</div>
+      <div class="fb">
+        <p>Robert Herron Jr. founded VersaLux Innovations LLC in 2016 in Cibolo, Texas, with one goal: eliminate the unnecessary complexity of the everyday shower routine.</p>
+        <p>What started as a simple question — <em>"Why does a simple shower require so many separate products?"</em> — became a design challenge, then a working prototype, and now a patent-pending product in a category of its own.</p>
+        <p>A decade of commitment has produced a trademarked brand, a patent-pending product, and a clear path to commercial launch.</p>
+      </div>
+      <div class="fmeta">
+        <div class="fm"><strong>2016</strong><span>Founded</span></div>
+        <div class="fm"><strong>Cibolo, TX</strong><span>Headquarters</span></div>
+        <div class="fm"><strong>3 Classes</strong><span>USPTO Trademark</span></div>
+        <div class="fm"><strong>Pending</strong><span>Design &amp; Utility</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="ey">Mission &amp; Vision</p>
+      <div class="mvs">
+        <div class="mvc"><div class="mvl">Mission Statement</div><p>"To revolutionize the personal hygiene experience through smart, luxurious, and convenient bathing products that empower people to elevate their everyday routines."</p></div>
+        <div class="mvc"><div class="mvl">Vision Statement</div><p>"To become the leading brand in premium personal care accessories, recognized globally for transforming the shower from a routine task into a truly luxurious experience."</p></div>
+        <div class="tmb"><div class="mvl" style="margin-bottom:8px">USPTO Trademark Protection</div><p>The VersaLux brand is trademarked across <strong>Class 021</strong> (household utensils), <strong>Class 024</strong> (textiles and fabrics), and <strong>Class 035</strong> (advertising and business services).</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROTOTYPE -->
+<section id="prototype" style="background:var(--off-white)">
+  <p class="ey">Development</p>
+  <h2 class="st">From Idea to Working Prototype.</h2>
+  <p class="ss">VersaLux Body Mate has moved beyond concept to a physical working prototype and is preparing for the next stages of development.</p>
+  <div class="tl">
+    <div class="tli"><div class="tldot">&#128161;</div><div class="tlc"><h4>Concept — 2016</h4><p>The idea: one product that handles what a shower full of separate tools currently requires.</p></div></div>
+    <div class="tli"><div class="tldot">&#9881;&#65039;</div><div class="tlc"><h4>Working Prototype</h4><p>A physical prototype incorporating terry-microfiber blend, silicone, nylon, neodymium magnets, internal soap bladder, and hanging loop.</p></div></div>
+    <div class="tli"><div class="tldot">&#128737;&#65039;</div><div class="tlc"><h4>IP Protection</h4><p>Trademarked across USPTO Classes 021, 024, and 035. Design and utility patent applications filed and pending.</p></div></div>
+    <div class="tli" style="padding-bottom:0"><div class="tldot">&#128640;</div><div class="tlc"><h4>Continued Development</h4><p>Ongoing refinement toward commercial launch. No pricing, launch date, or availability has been established.</p></div></div>
+  </div>
+</section>
+
+<!-- MOAT -->
+<section id="moat" style="background:linear-gradient(135deg,var(--navy) 0%,#0a2060 100%)">
+  <p class="ey" style="color:#93c5fd">Why VersaLux Body Mate</p>
+  <h2 class="st lt">No Direct Competitor Offers This Combination.</h2>
+  <p class="ss lt" style="margin-bottom:44px">The integrated dispenser + reversible construction + magnetic closure is an entirely new product category. Upon patent grant, this combination will be legally protected.</p>
+  <div class="mgrid">
+    <div class="mcard"><div class="mico">&#128737;&#65039;</div><h4>Patent Protection</h4><p>Design and utility applications filed and pending. The core innovation will be legally protected upon grant.</p></div>
+    <div class="mcard"><div class="mico">&#8482;&#65039;</div><h4>Trademark Portfolio</h4><p>Trademarked across three USPTO classifications — broad brand protection across the personal care accessories market.</p></div>
+    <div class="mcard"><div class="mico">&#127942;</div><h4>Category Creation</h4><p>VersaLux Body Mate is not competing in an existing category — it is creating one. First-mover advantage in a self-defined space.</p></div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section id="partners">
+  <p class="ey">Business &amp; Partnerships</p>
+  <h2 class="st">Want to Help Bring VersaLux Body Mate to Market?</h2>
+  <p class="pbody">VersaLux Body Mate is advancing from working prototype toward commercial launch. We welcome conversations with organizations and professionals interested in potential opportunities.</p>
+  <div class="cblock"><span style="font-size:1.3rem">&#9993;&#65039;</span><a href="mailto:info@versaluxinnovations.com">info@versaluxinnovations.com</a></div>
+</section>
+
+<!-- WAITLIST -->
+<section id="waitlist" style="background:var(--navy)">
+  <p class="ey" style="color:#93c5fd">Product Updates</p>
+  <h2 class="st lt">Be First to Know When VersaLux Body Mate Is Ready.</h2>
+  <p style="font-size:1rem;color:rgba(255,255,255,.70);margin-bottom:34px">Join the VersaLux Body Mate interest list for product development updates and future availability.</p>
+  <form class="wform" onsubmit="hw(event)">
+    <input type="email" placeholder="Your email address" required>
+    <button type="submit">Get Updates</button>
+  </form>
+  <p id="wm">&#10003; You're on the list! We'll be in touch.</p>
+  <p class="wnote">This is an interest list only — not a preorder. No payment is collected.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="flogo"><img src="versalux-logo.png" alt="VersaLux Innovations"></div>
+  <div class="ftxt">
+    &copy; 2026 VersaLux Innovations LLC &nbsp;&middot;&nbsp; Cibolo, TX &nbsp;&middot;&nbsp; VersaLuxInnovations.com<br>
+    <span style="font-size:.72rem;color:rgba(255,255,255,.35)">Design &amp; Utility Patents Pending &nbsp;&middot;&nbsp; USPTO Trademark Classes 021, 024, 035</span>
+  </div>
+  <div class="flinks">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Use</a>
+    <a href="mailto:info@versaluxinnovations.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+function hw(e){e.preventDefault();document.getElementById('wm').style.display='block';e.target.style.display='none'}
+window.addEventListener('scroll',()=>{document.getElementById('nb').style.padding=window.scrollY>60?'8px 48px':'10px 48px'});
+
+(function(){
+  var overlay=document.getElementById('anim-overlay');
+  var canvas=document.getElementById('anim-canvas');
+  var ctx=canvas.getContext('2d');
+  var W=canvas.width,H=canvas.height;
+  var logoImg=new Image();
+  logoImg.src=document.getElementById('logo-img').src;
+  var startTime=null;
+  var DURATION=3400;
+  function easeOut(t){return 1-Math.pow(1-t,3);}
+  function drawFrame(ts){
+    if(!startTime)startTime=ts;
+    var t=Math.min((ts-startTime)/DURATION,1);
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0c1a3a';
+    ctx.fillRect(0,0,W,H);
+    // Particles
+    if(t<0.6){
+      var pt=t/0.6;
+      var n=24;
+      for(var i=0;i<n;i++){
+        var angle=(i/n)*Math.PI*2;
+        var r=easeOut(pt)*180*(0.6+(i%3)*0.2);
+        var x=W/2+Math.cos(angle)*r;
+        var y=H/2+Math.sin(angle)*r;
+        var sz=(1-pt*0.7)*(3+(i%4));
+        var a=(1-pt*0.75)*0.7;
+        ctx.globalAlpha=a;
+        var colors=['#60a5fa','#3b82f6','#93c5fd','#1a5bc4'];
+        ctx.beginPath();
+        ctx.arc(x,y,sz,0,Math.PI*2);
+        ctx.fillStyle=colors[i%4];
+        ctx.fill();
+      }
+      ctx.globalAlpha=1;
+    }
+    // Logo
+    if(t>0.22){
+      var lt=Math.min((t-0.22)/0.52,1);
+      var ea=easeOut(lt);
+      var sc=0.55+ea*0.45;
+      var lw2=logoImg.naturalWidth||400;
+      var lh2=logoImg.naturalHeight||267;
+      var drawW=W*0.60*sc;
+      var drawH=drawW*(lh2/lw2);
+      ctx.globalAlpha=ea;
+      ctx.drawImage(logoImg,(W-drawW)/2,(H-drawH)/2,drawW,drawH);
+      ctx.globalAlpha=1;
+      // subtle glow
+      if(lt<0.85){
+        var gr=ctx.createRadialGradient(W/2,H/2,drawW*0.08,W/2,H/2,drawW*0.60);
+        gr.addColorStop(0,'rgba(59,130,246,'+(0.10*lt)+')');
+        gr.addColorStop(1,'rgba(59,130,246,0)');
+        ctx.fillStyle=gr;
+        ctx.fillRect(0,0,W,H);
+      }
+    }
+    // Tagline
+    if(t>0.80){
+      var it=Math.min((t-0.80)/0.20,1);
+      ctx.globalAlpha=easeOut(it);
+      ctx.font="300 16px 'Nunito',sans-serif";
+      ctx.fillStyle='rgba(255,255,255,0.80)';
+      ctx.textAlign='center';
+      ctx.fillText('I N N O V A T I O N S',W/2,H*0.76);
+      ctx.globalAlpha=1;
+    }
+    if(t<1){requestAnimationFrame(drawFrame);}
+    else{
+      setTimeout(function(){
+        overlay.classList.add('fade-out');
+        setTimeout(function(){overlay.classList.add('gone');},950);
+      },700);
+    }
+  }
+  logoImg.onload=function(){requestAnimationFrame(drawFrame);};
+  logoImg.onerror=function(){overlay.classList.add('gone');};
+  setTimeout(function(){overlay.classList.add('fade-out');setTimeout(function(){overlay.classList.add('gone');},950);},5500);
+})();
+</script>
+</body>
+</html>
